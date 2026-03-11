@@ -37,8 +37,8 @@ function initCommonUI(textToType) {
     let typingTimer;
     let index = 0;
     
-    // TTS 속도에 대략적으로 맞춘 타이핑 인터벌 (100ms)
-    const TR_INTERVAL = 110;
+    // TTS 속도(1배속)에 맞춘 타이핑 인터벌 (약 140ms)
+    const TR_INTERVAL = 140;
 
     function smoothType() {
         if (!typingTextEl) return;
@@ -122,8 +122,8 @@ function initCommonUI(textToType) {
             const voice = getKoreanVoice();
             if (voice) utterance.voice = voice;
             
-            utterance.rate = 1.15; // 기본 속도보다 약간 빠르게 자연스러운 대화톤
-            utterance.pitch = 1.1; // 약간 높은 톤 (친절함)
+            utterance.rate = 1.0; // 1배속 (정상 속도)
+            utterance.pitch = 1.0; // 기본 피치
             
             window.speechSynthesis.speak(utterance);
         }
@@ -143,9 +143,9 @@ function initCommonUI(textToType) {
         const voice = getKoreanVoice();
         if (voice) utterance.voice = voice;
         
-        // 100ms 당 1글자 속도로 타이핑 맞추기 위해 속도 & 피치 조율
-        utterance.rate = 1.25; 
-        utterance.pitch = 1.1; 
+        // 1배속 속도에 140ms 타이핑 간격 매칭
+        utterance.rate = 1.0; 
+        utterance.pitch = 1.0; 
         
         utterance.onstart = function() {
             smoothType();
