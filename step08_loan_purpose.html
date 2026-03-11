@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html class="h-full" lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <title>대출신청</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&amp;display=swap" rel="stylesheet" />
+    <link href="css/common.css" rel="stylesheet" />
+</head>
+
+<body class="h-full w-full bg-white overflow-hidden flex flex-col">
+    <!-- 상단 헤더 -->
+    <div class="pt-4 px-4 pb-2 bg-white z-30 flex justify-between items-center h-14 shrink-0 relative border-b border-gray-100">
+        <button class="p-2 -ml-2 text-gray-800 active:bg-gray-100 rounded-full transition-colors z-10" onclick="history.back()">
+            <i class="w-7 h-7" data-lucide="chevron-left"></i>
+        </button>
+        <h1 class="absolute left-1/2 -translate-x-1/2 text-[18px] font-bold text-gray-900 flex items-center">대출신청</h1>
+        <div class="flex items-center gap-1 cursor-pointer px-2 py-1 z-10" onclick="location.href='../index.html'">
+            <span class="text-sm font-bold text-gray-900">종료</span>
+            <i class="text-gray-900 w-4 h-4" data-lucide="phone-off"></i>
+        </div>
+    </div>
+
+    <!-- 메인 컨테이너 -->
+    <div class="flex-1 overflow-y-auto scrollbar-hide px-6 pt-4 relative flex flex-col scroll-smooth" id="main-scroll-container">
+        <!-- 타이핑 텍스트 영역 -->
+        <div class="min-h-[30px] flex items-center justify-start join-typing-area shrink-0" id="typing-area">
+            <span class="text-[#5031E5] font-bold text-[17px]" id="typing-text"></span>
+            <span class="inline-block w-[2px] h-5 bg-[#5031E5] ml-1 cursor-blink" id="cursor"></span>
+        </div>
+
+        <!-- 바운스 콘텐츠 -->
+        <div class="w-full opacity-0" id="main-content-body">
+            <div class="flex flex-col h-full bg-white px-1">
+                <div class="mb-8 pt-4">
+                    <h2 class="text-[20px] font-bold text-[#1a1a1a] leading-tight px-1">
+                        <span class="text-[#5031E5]">자금 용도</span>를<br>선택해 주세요
+                    </h2>
+                </div>
+
+                <div class="mb-8">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="border border-gray-200 rounded-xl py-4 text-center cursor-pointer font-bold text-[15px] text-gray-700 active:scale-95 transition-all w-full purpose-btn" onclick="selectPurpose(this, '생계자금')">가계자금<br><span class="text-xs font-normal text-gray-400">(생활비 등)</span></div>
+                        <div class="border border-gray-200 rounded-xl py-4 text-center cursor-pointer font-bold text-[15px] text-gray-700 active:scale-95 transition-all w-full purpose-btn" onclick="selectPurpose(this, '사업자금')">사업자금<br><span class="text-xs font-normal text-gray-400">(운영비 등)</span></div>
+                        <div class="border border-gray-200 rounded-xl py-4 text-center cursor-pointer font-bold text-[15px] text-gray-700 active:scale-95 transition-all w-full purpose-btn" onclick="selectPurpose(this, '주택구입')">주택구입자금<br><span class="text-xs font-normal text-gray-400">(매매잔금 등)</span></div>
+                        <div class="border border-gray-200 rounded-xl py-4 text-center cursor-pointer font-bold text-[15px] text-gray-700 active:scale-95 transition-all w-full purpose-btn" onclick="selectPurpose(this, '타기관대출상환')">기타대출상환<br><span class="text-xs font-normal text-gray-400">(대환대출 등)</span></div>
+                        <div class="border border-gray-200 rounded-xl py-4 text-center cursor-pointer font-bold text-[15px] text-gray-700 active:scale-95 transition-all w-full purpose-btn col-span-2" onclick="selectPurpose(this, '기타')">기타 (직접입력)</div>
+                    </div>
+                </div>
+
+                <!-- 하단 버튼 -->
+                <div class="mt-auto pt-4 pb-10">
+                    <button id="next-btn" class="w-full bg-[#E5E7EB] text-gray-400 py-4 rounded-xl text-[18px] font-bold transition-all pointer-events-none" onclick="goNext()">
+                        다음
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="w-full h-8 shrink-0" id="bottom-spacer"></div>
+    </div>
+
+    <script src="js/agent_overlay.js"></script>
+    <script src="js/common_ui.js"></script>
+    <script>
+        const pageText = "대출 후 자금 사용 계획을 선택해 주세요.";
+        initCommonUI(pageText);
+
+        let isPurposeSelected = false;
+        function selectPurpose(el, type) {
+            document.querySelectorAll('.purpose-btn').forEach(btn => {
+                btn.classList.remove('border-[#5031E5]', 'text-[#5031E5]', 'bg-indigo-50');
+                btn.classList.add('border-gray-200', 'text-gray-700');
+            });
+            el.classList.remove('border-gray-200', 'text-gray-700');
+            el.classList.add('border-[#5031E5]', 'text-[#5031E5]', 'bg-indigo-50');
+            const btn = document.getElementById('next-btn');
+            btn.classList.remove('bg-[#E5E7EB]', 'text-gray-400', 'pointer-events-none');
+            btn.classList.add('bg-[#5031E5]', 'text-white', 'shadow-lg', 'active:scale-95');
+        }
+        function goNext() {
+            location.href = 'step09_collateral_info.html';
+        }
+    </script>
+</body>
+
+</html>

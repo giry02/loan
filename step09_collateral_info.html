@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html class="h-full" lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <title>대출신청</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&amp;display=swap" rel="stylesheet" />
+    <link href="css/common.css" rel="stylesheet" />
+</head>
+
+<body class="h-full w-full bg-white overflow-hidden flex flex-col">
+    <!-- 상단 헤더 -->
+    <div class="pt-4 px-4 pb-2 bg-white z-30 flex justify-between items-center h-14 shrink-0 relative border-b border-gray-100">
+        <button class="p-2 -ml-2 text-gray-800 active:bg-gray-100 rounded-full transition-colors z-10" onclick="history.back()">
+            <i class="w-7 h-7" data-lucide="chevron-left"></i>
+        </button>
+        <h1 class="absolute left-1/2 -translate-x-1/2 text-[18px] font-bold text-gray-900 flex items-center">대출신청</h1>
+        <div class="flex items-center gap-1 cursor-pointer px-2 py-1 z-10" onclick="location.href='../index.html'">
+            <span class="text-sm font-bold text-gray-900">종료</span>
+            <i class="text-gray-900 w-4 h-4" data-lucide="phone-off"></i>
+        </div>
+    </div>
+
+    <!-- 메인 컨테이너 -->
+    <div class="flex-1 overflow-y-auto scrollbar-hide px-6 pt-4 relative flex flex-col scroll-smooth" id="main-scroll-container">
+        <!-- 타이핑 텍스트 영역 -->
+        <div class="min-h-[30px] flex items-center justify-start join-typing-area shrink-0" id="typing-area">
+            <span class="text-[#5031E5] font-bold text-[17px]" id="typing-text"></span>
+            <span class="inline-block w-[2px] h-5 bg-[#5031E5] ml-1 cursor-blink" id="cursor"></span>
+        </div>
+
+        <!-- 바운스 콘텐츠 -->
+        <div class="w-full opacity-0" id="main-content-body">
+            <div class="flex flex-col h-full bg-white px-1">
+                <div class="mb-8 pt-4">
+                    <h2 class="text-[20px] font-bold text-[#1a1a1a] leading-tight px-1">
+                        마지막으로 <span class="text-[#5031E5]">담보 주소</span>를<br>입력해 주세요
+                    </h2>
+                </div>
+
+                <div class="mb-6 relative">
+                    <label class="block text-[14px] font-bold text-gray-800 mb-2 ml-1">주소 검색</label>
+                    <div class="relative flex items-center w-full border-b border-gray-200 focus-within:border-[#5031E5] pb-1">
+                        <input type="text" id="address-search" placeholder="도로명, 지번, 건물명 검색" class="w-full py-3 text-[16px] outline-none bg-transparent font-medium text-gray-900 placeholder:text-gray-300" oninput="checkInput()">
+                        <div class="bg-gray-800 text-white rounded-lg px-3 py-1.5 text-[13px] font-medium cursor-pointer ml-2 whitespace-nowrap active:bg-gray-700" onclick="simulateSearch()">검색</div>
+                    </div>
+                </div>
+                <div class="mb-8 relative">
+                    <label class="block text-[14px] font-bold text-gray-800 mb-2 ml-1">상세 주소 (동/호수)</label>
+                    <input type="text" id="address-detail" placeholder="상세 주소를 입력해주세요" class="w-full py-3 text-[16px] border-b border-gray-200 outline-none bg-transparent font-medium text-gray-900 focus:border-[#5031E5] placeholder:text-gray-300" oninput="checkInput()">
+                </div>
+                <div class="bg-[#ebf2ff] rounded-xl p-4 flex gap-3">
+                    <i data-lucide="info" class="w-5 h-5 text-[#5031E5] shrink-0"></i>
+                    <p class="text-[13px] text-gray-700 leading-relaxed font-medium">현재 아파트 담보를 통한 대출 한도 조회만 제공하고 있습니다. 기타 주택 및 빌라는 추후 제공 예정입니다.</p>
+                </div>
+
+                <!-- 하단 버튼 -->
+                <div class="mt-auto pt-4 pb-10">
+                    <button id="next-btn" class="w-full bg-[#E5E7EB] text-gray-400 py-4 rounded-xl text-[18px] font-bold transition-all pointer-events-none" onclick="goNext()">
+                        다음
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="w-full h-8 shrink-0" id="bottom-spacer"></div>
+    </div>
+
+    <script src="js/agent_overlay.js"></script>
+    <script src="js/common_ui.js"></script>
+    <script>
+        const pageText = "한도 조회를 위해 아파트 주소를 알려주세요.";
+        initCommonUI(pageText);
+
+        document.getElementById('next-btn').innerText = '한도 및 금리 확인하기';
+        function simulateSearch() {
+            const el = document.getElementById('address-search');
+            // 입력값이 없으면 자동 완성
+            if(el.value.length === 0) el.value = '서울시 중구 세종대로 123';
+            else el.value = el.value + ' 아파트';
+            
+            // 상세 주소로 포커스 이동
+            document.getElementById('address-detail').focus();
+            checkInput();
+        }
+        function checkInput() {
+            const addr1 = document.getElementById('address-search').value.trim();
+            const addr2 = document.getElementById('address-detail').value.trim();
+            const btn = document.getElementById('next-btn');
+            if (addr1.length >= 2 && addr2.length >= 1) {
+                btn.classList.remove('bg-[#E5E7EB]', 'text-gray-400', 'pointer-events-none');
+                btn.classList.add('bg-[#5031E5]', 'text-white', 'shadow-lg', 'active:scale-95');
+            } else {
+                btn.classList.add('bg-[#E5E7EB]', 'text-gray-400', 'pointer-events-none');
+                btn.classList.remove('bg-[#5031E5]', 'text-white', 'shadow-lg', 'active:scale-95');
+            }
+        }
+        function goNext() {
+            // 결과 페이지 이동 전 로딩을 시뮬레이션
+            const btn = document.getElementById('next-btn');
+            btn.innerHTML = '<div class="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>';
+            btn.classList.add('pointer-events-none');
+            setTimeout(() => {
+                location.href = 'step10_result.html';
+            }, 1000);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html class="h-full" lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <title>대출신청</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&amp;display=swap" rel="stylesheet" />
+    <link href="css/common.css" rel="stylesheet" />
+</head>
+
+<body class="h-full w-full bg-white overflow-hidden flex flex-col">
+    <!-- 상단 헤더 -->
+    <div class="pt-4 px-4 pb-2 bg-white z-30 flex justify-between items-center h-14 shrink-0 relative border-b border-gray-100">
+        <button class="p-2 -ml-2 text-gray-800 active:bg-gray-100 rounded-full transition-colors z-10" onclick="history.back()">
+            <i class="w-7 h-7" data-lucide="chevron-left"></i>
+        </button>
+        <h1 class="absolute left-1/2 -translate-x-1/2 text-[18px] font-bold text-gray-900 flex items-center">대출신청</h1>
+        <div class="flex items-center gap-1 cursor-pointer px-2 py-1 z-10" onclick="location.href='../index.html'">
+            <span class="text-sm font-bold text-gray-900">종료</span>
+            <i class="text-gray-900 w-4 h-4" data-lucide="phone-off"></i>
+        </div>
+    </div>
+
+    <!-- 메인 컨테이너 -->
+    <div class="flex-1 overflow-y-auto scrollbar-hide px-6 pt-4 relative flex flex-col scroll-smooth" id="main-scroll-container">
+        <!-- 타이핑 텍스트 영역 -->
+        <div class="min-h-[30px] flex items-center justify-start join-typing-area shrink-0" id="typing-area">
+            <span class="text-[#5031E5] font-bold text-[17px]" id="typing-text"></span>
+            <span class="inline-block w-[2px] h-5 bg-[#5031E5] ml-1 cursor-blink" id="cursor"></span>
+        </div>
+
+        <!-- 바운스 콘텐츠 -->
+        <div class="w-full opacity-0" id="main-content-body">
+            <div class="flex flex-col h-full bg-white px-1">
+                <div class="mb-8 pt-4">
+                    <h2 class="text-[20px] font-bold text-[#1a1a1a] leading-tight px-1">
+                        본인확인을 위한 본인 인증은<br>신용점수에 <span class="text-[#5031E5]">영향이 없습니다</span>
+                    </h2>
+                </div>
+
+                <!-- 이름 (읽기 전용 표시) -->
+                <div class="mb-6 relative">
+                    <label class="block text-[14px] font-bold text-gray-500 mb-2 ml-1">이름</label>
+                    <div class="w-full py-2 text-[18px] border-b border-gray-200 font-medium text-gray-900 flex justify-between items-center">
+                        <span id="display-name">홍길동</span>
+                        <div class="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center cursor-pointer" onclick="history.back()">
+                            <i data-lucide="x" class="w-3 h-3 text-white"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- 주민등록번호 입력 -->
+                <div class="mb-8">
+                    <label class="block text-[14px] font-bold text-gray-800 mb-2 ml-1">주민등록번호</label>
+                    <div class="flex items-center gap-3 w-full border-b border-gray-200 pb-2 focus-within:border-[#5031E5] transition-colors">
+                        <input type="tel" id="rrn-front" placeholder="앞 6자리" maxlength="6" class="flex-1 py-2 text-[18px] outline-none placeholder:text-gray-300 font-medium text-gray-900 bg-transparent w-full text-center tracking-widest" oninput="moveToBack(this)">
+                        <span class="text-gray-400 font-bold">-</span>
+                        <div class="flex-1 flex items-center">
+                            <input type="password" id="rrn-back" placeholder="뒷 7자리" maxlength="7" class="w-full py-2 text-[18px] outline-none placeholder:text-gray-300 font-medium text-gray-900 bg-transparent text-center tracking-widest" oninput="checkInput()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 하단 버튼 -->
+                <div class="mt-auto pt-4 pb-10">
+                    <button id="next-btn" class="w-full bg-[#E5E7EB] text-gray-400 py-4 rounded-xl text-[18px] font-bold transition-all pointer-events-none" onclick="goNext()">
+                        다음
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="w-full h-8 shrink-0" id="bottom-spacer"></div>
+    </div>
+
+    <script src="js/agent_overlay.js"></script>
+    <script src="js/common_ui.js"></script>
+    <script>
+        const pageText = "정확한 조회를 위해 주민등록번호를 입력해 주세요.";
+        initCommonUI(pageText);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const nameParam = urlParams.get('name');
+        if (nameParam) { document.getElementById('display-name').textContent = nameParam; }
+        function moveToBack(el) {
+            el.value = el.value.replace(/[^0-9]/g, '');
+            if (el.value.length === 6) { document.getElementById('rrn-back').focus(); }
+            checkInput();
+        }
+        function checkInput() {
+            const front = document.getElementById('rrn-front');
+            const back = document.getElementById('rrn-back');
+            const btn = document.getElementById('next-btn');
+            back.value = back.value.replace(/[^0-9]/g, '');
+            if (front.value.length === 6 && back.value.length >= 1) {
+                btn.classList.remove('bg-[#E5E7EB]', 'text-gray-400', 'pointer-events-none');
+                btn.classList.add('bg-[#5031E5]', 'text-white', 'shadow-lg', 'active:scale-95');
+            } else {
+                btn.classList.add('bg-[#E5E7EB]', 'text-gray-400', 'pointer-events-none');
+                btn.classList.remove('bg-[#5031E5]', 'text-white', 'shadow-lg', 'active:scale-95');
+            }
+        }
+        function goNext() {
+            location.href = `step03_telecom.html?name=${encodeURIComponent(nameParam || '홍길동')}`;
+        }
+    </script>
+</body>
+
+</html>

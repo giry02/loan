@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html class="h-full" lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <title>대출신청</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&amp;display=swap" rel="stylesheet" />
+    <link href="css/common.css" rel="stylesheet" />
+</head>
+
+<body class="h-full w-full bg-white overflow-hidden flex flex-col">
+    <!-- 상단 헤더 -->
+    <div class="pt-4 px-4 pb-2 bg-white z-30 flex justify-between items-center h-14 shrink-0 relative border-b border-gray-100">
+        <button class="p-2 -ml-2 text-gray-800 active:bg-gray-100 rounded-full transition-colors z-10" onclick="history.back()">
+            <i class="w-7 h-7" data-lucide="chevron-left"></i>
+        </button>
+        <h1 class="absolute left-1/2 -translate-x-1/2 text-[18px] font-bold text-gray-900 flex items-center">대출신청</h1>
+        <div class="flex items-center gap-1 cursor-pointer px-2 py-1 z-10" onclick="location.href='../index.html'">
+            <span class="text-sm font-bold text-gray-900">종료</span>
+            <i class="text-gray-900 w-4 h-4" data-lucide="phone-off"></i>
+        </div>
+    </div>
+
+    <!-- 메인 컨테이너 -->
+    <div class="flex-1 overflow-y-auto scrollbar-hide px-6 pt-4 relative flex flex-col scroll-smooth" id="main-scroll-container">
+        <!-- 타이핑 텍스트 영역 -->
+        <div class="min-h-[30px] flex items-center justify-start join-typing-area shrink-0" id="typing-area">
+            <span class="text-[#5031E5] font-bold text-[17px]" id="typing-text"></span>
+            <span class="inline-block w-[2px] h-5 bg-[#5031E5] ml-1 cursor-blink" id="cursor"></span>
+        </div>
+
+        <!-- 바운스 콘텐츠 -->
+        <div class="w-full opacity-0" id="main-content-body">
+            <div class="flex flex-col h-full bg-white px-1">
+                <div class="mb-8 pt-4">
+                    <h2 class="text-[20px] font-bold text-[#1a1a1a] leading-tight px-1">
+                        고객님의 <span class="text-[#5031E5]">직업</span>과<br><span class="text-[#5031E5]">의료보험</span>을 선택해주세요
+                    </h2>
+                </div>
+
+                <!-- 직업 -->
+                <div class="mb-8">
+                    <label class="block text-[14px] font-bold text-gray-800 mb-3 ml-1">직업 <span class="text-red-500">*</span></label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="border border-gray-200 rounded-xl py-3 text-center cursor-pointer font-bold text-[14px] text-gray-700 active:scale-95 transition-all select-btn job-btn" onclick="selectOption('job', this, '직장인')">직장인</div>
+                        <div class="border border-gray-200 rounded-xl py-3 text-center cursor-pointer font-bold text-[14px] text-gray-700 active:scale-95 transition-all select-btn job-btn" onclick="selectOption('job', this, '개인/법인사업자')">개인/법인사업자</div>
+                        <div class="border border-gray-200 rounded-xl py-3 text-center cursor-pointer font-bold text-[14px] text-gray-700 active:scale-95 transition-all select-btn job-btn" onclick="selectOption('job', this, '공무원')">공무원</div>
+                        <div class="border border-gray-200 rounded-xl py-3 text-center cursor-pointer font-bold text-[14px] text-gray-700 active:scale-95 transition-all select-btn job-btn" onclick="selectOption('job', this, '프리랜서')">프리랜서</div>
+                        <div class="border border-gray-200 rounded-xl py-3 text-center cursor-pointer font-bold text-[14px] text-gray-700 active:scale-95 transition-all select-btn job-btn" onclick="selectOption('job', this, '주부')">주부</div>
+                        <div class="border border-gray-200 rounded-xl py-3 text-center cursor-pointer font-bold text-[14px] text-gray-700 active:scale-95 transition-all select-btn job-btn" onclick="selectOption('job', this, '무직/기타')">무직/기타</div>
+                    </div>
+                </div>
+                <!-- 의료보험 -->
+                <div class="mb-8">
+                    <label class="block text-[14px] font-bold text-gray-800 mb-3 ml-1">의료보험 <span class="text-red-500">*</span></label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="border border-gray-200 rounded-xl py-3 text-center cursor-pointer font-bold text-[14px] text-gray-700 active:scale-95 transition-all select-btn insurance-btn" onclick="selectOption('insurance', this, '직장건강보험')">직장건강보험</div>
+                        <div class="border border-gray-200 rounded-xl py-3 text-center cursor-pointer font-bold text-[14px] text-gray-700 active:scale-95 transition-all select-btn insurance-btn" onclick="selectOption('insurance', this, '지역건강보험')">지역건강보험</div>
+                    </div>
+                </div>
+
+                <!-- 하단 버튼 -->
+                <div class="mt-auto pt-4 pb-10">
+                    <button id="next-btn" class="w-full bg-[#E5E7EB] text-gray-400 py-4 rounded-xl text-[18px] font-bold transition-all pointer-events-none" onclick="goNext()">
+                        다음
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="w-full h-8 shrink-0" id="bottom-spacer"></div>
+    </div>
+
+    <script src="js/agent_overlay.js"></script>
+    <script src="js/common_ui.js"></script>
+    <script>
+        const pageText = "가입하신 보험과 직업을 확인해 주세요.";
+        initCommonUI(pageText);
+
+        const selections = { job: null, insurance: null };
+        function selectOption(category, el, value) {
+            document.querySelectorAll(`.${category}-btn`).forEach(btn => {
+                btn.classList.remove('border-[#5031E5]', 'text-[#5031E5]', 'bg-indigo-50');
+                btn.classList.add('border-gray-200', 'text-gray-700');
+            });
+            el.classList.remove('border-gray-200', 'text-gray-700');
+            el.classList.add('border-[#5031E5]', 'text-[#5031E5]', 'bg-indigo-50');
+            selections[category] = value;
+            checkAllSelected();
+        }
+        function checkAllSelected() {
+            const btn = document.getElementById('next-btn');
+            if (selections.job && selections.insurance) {
+                btn.classList.remove('bg-[#E5E7EB]', 'text-gray-400', 'pointer-events-none');
+                btn.classList.add('bg-[#5031E5]', 'text-white', 'shadow-lg', 'active:scale-95');
+            } else {
+                btn.classList.add('bg-[#E5E7EB]', 'text-gray-400', 'pointer-events-none');
+                btn.classList.remove('bg-[#5031E5]', 'text-white', 'shadow-lg', 'active:scale-95');
+            }
+        }
+        function goNext() {
+            location.href = 'step05_2_housing.html';
+        }
+    </script>
+</body>
+
+</html>

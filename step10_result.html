@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html class="h-full" lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+        name="viewport" />
+    <title>대출 신청 완료</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link href="css/common.css" rel="stylesheet" />
+    <style>
+        .result-container {
+            background-color: #F8F9FA;
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+        }
+        .content-card {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            padding: 24px;
+        }
+        .logo-circle {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background-color: #5031E5;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 20px;
+            margin: 0 auto 16px auto;
+        }
+    </style>
+</head>
+
+<body class="h-full w-full bg-white overflow-hidden flex flex-col">
+    <div class="pt-4 px-4 pb-2 bg-white z-30 flex justify-between items-center h-14 shrink-0 relative border-b border-gray-100">
+        <button class="p-2 -ml-2 text-gray-800 active:bg-gray-100 rounded-full transition-colors z-10" onclick="history.back()">
+            <i class="w-7 h-7" data-lucide="chevron-left"></i>
+        </button>
+        <h1 class="absolute left-1/2 -translate-x-1/2 text-[18px] font-bold text-gray-900 flex items-center">
+            대출신청
+        </h1>
+        <div class="flex items-center gap-1 cursor-pointer px-2 py-1 z-10" onclick="location.href='index.html'">
+            <span class="text-sm font-bold text-gray-900">종료</span>
+            <i class="text-gray-900 w-4 h-4" data-lucide="phone-off"></i>
+        </div>
+    </div>
+
+    <!-- 메인 컨테이너 -->
+    <div class="flex-1 overflow-y-auto scrollbar-hide flex flex-col scroll-smooth bg-white pb-24"
+        id="main-scroll-container">
+        <!-- 타이핑 텍스트 영역 (결과 페이지는 상단 패딩 추가) -->
+        <div class="min-h-[30px] flex items-center justify-center join-typing-area shrink-0 pt-8 pb-4" id="typing-area">
+            <span class="text-[#5031E5] font-bold text-[18px]" id="typing-text"></span>
+            <span class="inline-block w-[2px] h-5 bg-[#5031E5] ml-1 cursor-blink" id="cursor"></span>
+        </div>
+
+        <!-- 바운스 콘텐츠 -->
+        <div class="w-full opacity-0 flex-1 flex flex-col" id="main-content-body">
+            
+            <div class="result-container flex-1 mt-4 px-4 pt-8 pb-24">
+                <div class="content-card mb-6 border border-gray-100 text-center">
+                    <div class="logo-circle shrink-0"><i data-lucide="landmark" class="w-7 h-7"></i></div>
+                    <h2 class="text-[20px] font-bold text-gray-900 mb-6 tracking-tight">저축은행</h2>
+
+                    <div class="flex flex-col gap-4">
+                        <div class="flex justify-between items-center pb-4 border-b border-gray-100">
+                            <span class="text-gray-500 font-medium text-[15px]">대출금리</span>
+                            <span class="text-[#5031E5] font-bold text-[20px]">6.14%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 font-medium text-[15px]">대출한도</span>
+                            <span class="text-[#5031E5] font-bold text-[22px]">3억 3,440만원</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 대출 신청하기 버튼 -->
+                <div class="mt-8 mb-6">
+                    <button onclick="location.href='index.html'" class="w-full bg-[#5031E5] text-white py-4 rounded-xl text-[18px] font-bold shadow-lg active:scale-95 transition-all">
+                        대출 신청하기
+                    </button>
+                </div>
+
+                <!-- 상품안내 아코디언 -->
+                <div class="bg-white rounded-xl border border-gray-100 overflow-hidden">
+                    <div class="flex justify-between items-center p-4 cursor-pointer bg-gray-50" onclick="toggleAccordion('product-info')">
+                        <h3 class="font-bold text-gray-900 text-[16px]">상품안내</h3>
+                        <i data-lucide="chevron-up" class="w-5 h-5 text-gray-500 transition-transform" id="product-info-icon"></i>
+                    </div>
+                    <div class="p-4 border-t border-gray-100 text-[13px] text-gray-600 leading-relaxed" id="product-info-content">
+                        <p class="font-bold text-gray-800 mb-1">대출상품명</p>
+                        <ul class="list-disc pl-4 mb-4">
+                            <li>일반 주택담보대출(가계)</li>
+                            <li>일반 주택담보대출(사업자)</li>
+                            <li>사업자 후순위 아파트담보대출</li>
+                        </ul>
+
+                        <p class="font-bold text-gray-800 mb-1">신청대상</p>
+                        <p class="mb-4">주택담보제공이 가능한 개인, 개인사업자 또는 법인/신용평점 [NICE] 430점 이상 고객(당행 심사기준에 따라 거절될 수 있음)</p>
+
+                        <p class="font-bold text-gray-800 mb-1">대출 한도</p>
+                        <ul class="list-disc pl-4 mb-2 text-[#5031E5] font-medium">
+                            <li>일반 주택담보대출(가계) *규제지역별 LTV한도 차등적용</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- 유의사항 아코디언 -->
+                <div class="bg-white rounded-xl border border-gray-100 overflow-hidden mt-3">
+                    <div class="flex justify-between items-center p-4 cursor-pointer bg-gray-50" onclick="toggleAccordion('notice')">
+                        <h3 class="font-bold text-gray-900 text-[16px]">유의사항</h3>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-gray-500 transition-transform" id="notice-icon"></i>
+                    </div>
+                    <div class="p-4 border-t border-gray-100 text-[13px] text-gray-600 leading-relaxed hidden" id="notice-content">
+                        <ul class="list-disc pl-4 space-y-1">
+                            <li>계약을 체결하기 전에 상품설명서와 약관을 확인하시기 바랍니다.</li>
+                            <li>상환능력에 비해 대출금이 과도할 경우 귀하의 신용등급 또는 개인신용평점이 하락할 수 있습니다.</li>
+                            <li>일정기간 원리금을 연체할 경우, 모든 원리금을 변제할 의무가 발생할 수 있습니다.</li>
+                        </ul>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="w-full h-8 shrink-0" id="bottom-spacer"></div>
+    </div>
+
+    <script src="js/agent_overlay.js"></script>
+    <script src="js/common_ui.js"></script>
+    <script>
+        const pageText = "고객님께 딱 맞는 최적의 금리를 찾았어요!";
+        initCommonUI(pageText);
+
+        function toggleAccordion(id) {
+            const content = document.getElementById(id + '-content');
+            const icon = document.getElementById(id + '-icon');
+            
+            if(content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.setAttribute('data-lucide', 'chevron-up');
+            } else {
+                content.classList.add('hidden');
+                icon.setAttribute('data-lucide', 'chevron-down');
+            }
+            lucide.createIcons();
+        }
+
+        function completeLoan() {
+            alert('대출 신청이 정상적으로 접수되었습니다.\n영업점 담당자가 곧 연락드릴 예정입니다.');
+            location.href = '../index.html';
+        }
+    </script>
+</body>
+
+</html>
