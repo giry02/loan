@@ -109,8 +109,8 @@ function initCommonUI(textToType) {
         // 화면에 보여지는(바운스 된 요소들) 큰 제목, 설명글 수집
         const els = mainContentBody.querySelectorAll('h2, .mb-8 p, .mb-6 p');
         els.forEach(el => {
-            // 안보이는 요소 무시 (display: none 등)
-            if (el.offsetParent !== null) {
+            // 안보이는 요소 무시 (display: none 등), 제외 속성 무시
+            if (el.offsetParent !== null && el.getAttribute('data-tts-ignore') !== 'true') {
                 contentText += " " + (el.innerText || el.textContent);
             }
         });
